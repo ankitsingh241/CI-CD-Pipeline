@@ -1,10 +1,66 @@
-Clone the app
-update
-install jenkins
-pipeline using groovy syntax
-docker install
-docker ps (error: permission denied --> sudo usermod -aG docker $USER)
 
-docker run -itd --name mywebsite -p 80:80 my_website
-docker build -t website .
-docker run -itd -p 80:80  --name  website website
+In this lab will see how to deploy a website using Docker and Jenkins pipeline project.
+
+Step 1 : Create a linux server and clone the app or repository using command
+         
+         --> sudo git clone [link of the repo]
+
+Step 2 : Install Jenkins using command 
+         
+         --> sudo apt install openjdk-17-jre
+
+         --> sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+             https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+         
+         --> echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+             https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+             /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+         --> sudo apt-get update
+          
+         --> sudo apt-get install jenkins
+
+         Login and install all the requried plugins.
+
+Step 3 : Install Docker using command
+         
+         --> sudo apt install docker.io
+
+         Write your dockerfile according to your code requiremnets.
+         Now, if you docker ps here you will see an error becuase Docker has no permission of Ubuntu server
+         then use this command to append the permission.
+
+         --> sudo usermod -aG docker $USER
+
+         Now we will make an image of the dockerfile using command
+
+         --> docker build -t [name of the image] . # here dot(.) represents current directory
+
+         Now using image make a container
+
+         --> docker run -itd --name [name of the container] -p 80:80 (port that you want to expose) [name of the image]
+         
+         Now copy the public IP of your server and open is your browser you will see your running website.
+
+         Once done you can stop or remove your container.
+
+Step 4 : Go to jenkins select pipeline project --> select github project add github url --> select github hook trigger
+         
+         Now write your groovy code according to your requirement for thr pipeline.
+
+         Here I have added three stages in my code 1. Cloning the code
+                                                   2. Building the image 
+                                                   3. Deploying the container
+         Once done you can build the project if it is succesfull then good or if you find any erroe like permission denined use command
+        
+         -->  sudo usermod -aG jenkins docker
+
+         Now copy the public IP again in your browser and you will see your your website is running smooth.
+
+Step 5 : If you want to automate this process using webhook 
+         
+         go to your repo --> settings --> webhook --> paste the url of jenkins (IP:8080/giyhub-webhook/)
+
+         and dnoe, now whenever you will commit in that repo the pipeline will be triggerd automatically.
+         
+          
