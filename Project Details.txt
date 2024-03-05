@@ -1,3 +1,10 @@
 Clone the app
 update
+install jenkins
+pipeline using groovy syntax
 docker install
+docker ps (error: permission denied --> sudo usermod -aG docker $USER)
+
+docker run -itd --name mywebsite -p 80:80 my_website
+docker build -t website .
+docker run -itd -p 80:80  --name  website website
